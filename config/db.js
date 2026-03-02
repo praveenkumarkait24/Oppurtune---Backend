@@ -41,7 +41,7 @@ const connectDB = async () => {
             console.error("❌ INVALID MONGO URI FORMAT");
             console.error("The URI must start with 'mongodb://' or 'mongodb+srv://'.");
             console.error("Double-check your .env file for missing slashes or hidden characters.");
-            process.exit(1);
+            throw new Error("Invalid MongoDB URI format");
         }
         console.log('✅ URI Format Validated');
         console.log('------------------------------');
@@ -73,7 +73,7 @@ const connectDB = async () => {
             console.error(error.stack);
         }
 
-        process.exit(1);
+        throw error;
     }
 };
 
