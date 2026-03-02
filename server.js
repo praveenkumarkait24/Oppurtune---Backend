@@ -6,10 +6,6 @@ console.log('--- Environment Diagnostics ---');
 console.log(`Working Directory: ${process.cwd()}`);
 console.log(`.env Path: ${path.join(process.cwd(), '.env')}`);
 console.log(`MONGO_URI exists: ${!!process.env.MONGO_URI}`);
-if (!process.env.MONGO_URI && process.env.FORCE_TEST_URI !== 'true') {
-    console.error('FATAL: MONGO_URI is missing from process.env');
-    process.exit(1);
-}
 console.log('-------------------------------');
 
 const express = require('express');
@@ -27,6 +23,10 @@ require('./config/passport');
 const startServer = async () => {
     try {
         console.log('🚀 Starting Opportune Backend...');
+
+        if (!process.env.MONGO_URI && process.env.FORCE_TEST_URI !== 'true') {
+            throw new Error('MONGO_URI is not defined in environment variables');
+        }
 
         // 5. Ensure Server Starts ONLY After DB Connects
         await connectDB();
